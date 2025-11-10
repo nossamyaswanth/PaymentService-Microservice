@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-config
+data:
+  ASPNETCORE_ENVIRONMENT: "Development"
+  Services__BillingBaseUrl: "http://billing-service:5075"
+  ConnectionStrings__Default: "Server=payment-db,1433;Database=PaymentDb;User Id=sa;Password=$(SA_PASSWORD);TrustServerCertificate=True"

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-db
+spec:
+  selector:
+    matchLabels:
+      app: payment-db
+  template:
+    metadata:
+      labels:
+        app: payment-db
+    spec:
+      containers:
+      - name: payment-db
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: payment-secret
+              key: SA_PASSWORD
+        volumeMounts:
+        - mountPath: /var/opt/mssql
+          name: payment-storage
+      volumes:
+      - name: payment-storage
+        persistentVolumeClaim:
+          claimName: payment-db-pvc
